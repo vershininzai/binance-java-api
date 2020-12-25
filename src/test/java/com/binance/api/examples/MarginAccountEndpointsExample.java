@@ -19,7 +19,7 @@ public class MarginAccountEndpointsExample {
     BinanceApiMarginRestClient client = factory.newMarginRestClient();
 
     // Get account balances
-    MarginAccount marginAccount = client.getAccount();
+    MarginAccount marginAccount = client.getAccount(null);
     System.out.println(marginAccount.getUserAssets());
     System.out.println(marginAccount.getAssetBalance("ETH"));
     System.out.println(marginAccount.getMarginLevel());

@@ -36,6 +36,13 @@ public class BinanceApiConfig {
 	}
 
 	/**
+	 * REST API base URL.
+	 */
+	public static String getFapiBaseUrl() {
+		return String.format("https://fapi.%s", getBaseDomain());
+	}
+
+	/**
 	 * Streaming API base URL.
 	 */
 	public static String getStreamApiBaseUrl() {

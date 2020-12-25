@@ -38,7 +38,7 @@ public class BinanceApiServiceGenerator {
 
     @SuppressWarnings("unchecked")
     private static final Converter<ResponseBody, BinanceApiError> errorBodyConverter =
-            (Converter<ResponseBody, BinanceApiError>)converterFactory.responseBodyConverter(
+            (Converter<ResponseBody, BinanceApiError>) converterFactory.responseBodyConverter(
                     BinanceApiError.class, new Annotation[0], null);
 
     public static <S> S createService(Class<S> serviceClass) {
@@ -48,6 +48,24 @@ public class BinanceApiServiceGenerator {
     public static <S> S createService(Class<S> serviceClass, String apiKey, String secret) {
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
                 .baseUrl(BinanceApiConfig.getApiBaseUrl())
+                .addConverterFactory(converterFactory);
+
+        if (StringUtils.isEmpty(apiKey) || StringUtils.isEmpty(secret)) {
+            retrofitBuilder.client(sharedClient);
+        } else {
+            // `adaptedClient` will use its own interceptor, but share thread pool etc with the 'parent' client
+            AuthenticationInterceptor interceptor = new AuthenticationInterceptor(apiKey, secret);
+            OkHttpClient adaptedClient = sharedClient.newBuilder().addInterceptor(interceptor).build();
+            retrofitBuilder.client(adaptedClient);
+        }
+
+        Retrofit retrofit = retrofitBuilder.build();
+        return retrofit.create(serviceClass);
+    }
+
+    public static <S> S createFuturesService(Class<S> serviceClass, String apiKey, String secret) {
+        Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
+                .baseUrl(BinanceApiConfig.getFapiBaseUrl())
                 .addConverterFactory(converterFactory);
 
         if (StringUtils.isEmpty(apiKey) || StringUtils.isEmpty(secret)) {

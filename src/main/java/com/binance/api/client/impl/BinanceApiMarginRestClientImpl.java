@@ -3,7 +3,15 @@ package com.binance.api.client.impl;
 import com.binance.api.client.BinanceApiMarginRestClient;
 import com.binance.api.client.constant.BinanceApiConstants;
 import com.binance.api.client.domain.TransferType;
-import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.account.LoanQueryResult;
+import com.binance.api.client.domain.account.MarginAccount;
+import com.binance.api.client.domain.account.MarginNewOrder;
+import com.binance.api.client.domain.account.MarginNewOrderResponse;
+import com.binance.api.client.domain.account.MarginTransaction;
+import com.binance.api.client.domain.account.MaxBorrowableQueryResult;
+import com.binance.api.client.domain.account.Order;
+import com.binance.api.client.domain.account.RepayQueryResult;
+import com.binance.api.client.domain.account.Trade;
 import com.binance.api.client.domain.account.request.CancelOrderRequest;
 import com.binance.api.client.domain.account.request.CancelOrderResponse;
 import com.binance.api.client.domain.account.request.OrderRequest;
@@ -26,8 +34,10 @@ public class BinanceApiMarginRestClientImpl implements BinanceApiMarginRestClien
     }
 
     @Override
-    public MarginAccount getAccount() {
-        long timestamp = System.currentTimeMillis();
+    public MarginAccount getAccount(Long timestamp) {
+        if (timestamp == null) {
+            timestamp = System.currentTimeMillis();
+        }
         return executeSync(binanceApiService.getMarginAccount(BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, timestamp));
     }
 

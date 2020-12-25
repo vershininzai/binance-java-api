@@ -13,7 +13,7 @@ public interface BinanceApiMarginRestClient {
     /**
      * Get current margin account information using default parameters.
      */
-    MarginAccount getAccount();
+    MarginAccount getAccount(Long timestamp);
 
     /**
      * Get all open orders on margin account for a symbol.
